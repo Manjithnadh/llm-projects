@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>text generation bot</title>
+</head>
+<body style="font-family: 'Arial', sans-serif; background-color: #e8f5e9; text-align: center; padding: 20px;">
+
+    <h1 style="color: #2e7d32;">Text Generation Chatbot Assistant</h1>
+
+    <form method="post" style="margin: 20px 0;">
+        <textarea name="user_input"
+                  placeholder="ask your query"
+                  required
+                  style="width: 80%; height: 100px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);"></textarea>
+        <br>
+        <button type="submit"
+                style="padding: 10px 20px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+            Ask AI
+        </button>
+    </form>
+
+    <h2 style="color: #1b5e20;">AI Response:</h2>
+    <p style="background-color: #dcedc8; padding: 15px; border-radius: 5px; display: inline-block; max-width: 80%; text-align: left; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        {{ response }}
+    </p>
+
+</body>
+</html>
+
