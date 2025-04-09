@@ -5,7 +5,7 @@ import openai
 app = Flask(__name__)
 
 # Configure OpenAI API Key
-openai.api_key = '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'
+openai.api_key = 'your Open API key'
 
 # Initialize the SQLite database
 def init_db():
