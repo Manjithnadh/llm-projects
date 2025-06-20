@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LangGraph Assistant</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+    }
+
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 100%;
+    }
+
+    .chat-header {
+      background-color: #0077ff;
+      color: white;
+      padding: 16px;
+      text-align: center;
+      font-size: 1.2em;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+
+    .message {
+      margin: 10px 0;
+      line-height: 1.4;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 75%;
+    }
+
+    .user {
+      background-color: #e3f2fd;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .assistant {
+      background-color: #f0f0f0;
+      align-self: flex-start;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+      background: white;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      font-size: 1em;
+    }
+
+    .chat-input button {
+      padding: 15px 20px;
+      background-color: #0077ff;
+      color: white;
+      border: none;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .chat-input button:hover {
+      background-color: #005fd3;
+    }
+
+    .chat-box::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat-box::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">🤖 LangGraph Assistant</div>
+    <div class="chat-box" id="chat-box"></div>
+    <form class="chat-input" id="chat-form">
+      <input type="text" id="user-input" placeholder="Type your message..." required />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    let threadId = null;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = input.value.trim();
+      if (!message) return;
+
+      // Show user message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = message;
+      chatBox.appendChild(userMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      input.value = '';
+
+      // Send to server
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message, thread_id: threadId })
+        });
+
+        const data = await res.json();
+        threadId = data.thread_id;
+
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'message assistant';
+        aiMsg.textContent = data.response || 'No response.';
+        chatBox.appendChild(aiMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (err) {
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'message assistant';
+        errorMsg.textContent = '❌ Error connecting to AI.';
+        chatBox.appendChild(errorMsg);
+      }
+    });
+  </script>
+</body>
+</html>
